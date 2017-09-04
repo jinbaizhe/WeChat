@@ -151,7 +151,7 @@ def getLibraryInfo():
     match = re.findall(pattern, table, re.DOTALL)
     return match
 def invoke(openid, account, passwd):
-    db_path = 'info.db'
+    db_path = '/root/mysite/info.db'
     conn = sqlite3.connect(db_path)
     conn.text_factory = str
     cursor = conn.cursor()

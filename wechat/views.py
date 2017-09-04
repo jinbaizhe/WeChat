@@ -32,7 +32,7 @@ def WeChat(request):
                 wechat_instance.parse_data(request.body)
                 message = wechat_instance.get_message()
                 if isinstance(message, TextMessage):
-                    db_path = 'info.db'
+                    db_path = '/root/mysite/info.db'
                     keywords=message.content
                     openid=message.source
                     reply_text = ''
@@ -51,20 +51,9 @@ def WeChat(request):
                         passwd=match.group(2)
                         status=Crawler.verify(account, passwd)
                         if status == True:
-                            conn=sqlite3.connect(db_path)
-                            cursor=conn.cursor()
-                            cursor.execute('select account,passwd from user where openid=?',(openid,))
-                            value=cursor.fetchall()
-                            if value:
-                                cursor.execute('update user set account=?,passwd=? where openid=?',(account,passwd,openid))
-                                reply_text ='身份验证通过，数据库大约将在1小时之后更新完成'
-                            else:
-                                t = threading.Thread(target=Crawler.invoke, args=(openid, account, passwd))
-                                t.start()
-                                reply_text = '身份验证通过，数据库大约将在1分钟之后更新完成'
-                            cursor.close()
-                            conn.commit()
-                            conn.close()
+                            t = threading.Thread(target=Crawler.invoke, args=(openid, account, passwd))
+                            t.start()
+                            reply_text = '身份验证通过，数据库大约将在1分钟之后更新完成'
                         else:
                             reply_text = '身份验证未通过，错误信息：'+str(status)
                     else:
