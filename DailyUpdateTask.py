@@ -10,8 +10,9 @@ def task():
         for each in value:
             Crawler.invoke(each[0], each[1], each[2])
             time.sleep(10)
-        with open('task_log.txt','a') as f:
-            f.write(str(time.strftime('%Y-%m-%d-%H-%M',time.localtime(time.time())))+':finish')
+        with open('/root/mysite/task_log.txt','a') as f:
+            f.write(str(time.strftime('%Y-%m-%d-%H-%M',time.localtime(time.time())))+':finish\r\n')
         time.sleep(2*60 * 60)
-t=threading.Thread(target=task)
+t=threading.Thread(target=task,daemon=True)
 t.start()
+t.join()

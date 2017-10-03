@@ -33,7 +33,7 @@ def WeChat(request):
                 message = wechat_instance.get_message()
                 if isinstance(message, TextMessage):
                     db_path = '/root/mysite/info.db'
-                    keywords=message.content
+                    keywords=(message.content).strip()
                     openid=message.source
                     reply_text = ''
                     if not os.path.isfile(db_path):
@@ -80,7 +80,7 @@ def WeChat(request):
                                 reply_text = value[0][3]+ '\r\n'
                                 reply_text += '更新时间：' + update_time
                             else:
-                                reply_text='指令无效'
+                                reply_text='无效指令'
                         else:
                             reply_text = '账号未绑定或账号信息已过期\r\n回复 绑定 学号 统一身份认证密码（各部分用空格隔开）完成账号绑定'
                         cursor.close()
